@@ -1,12 +1,12 @@
-import { useRef, useMemo, useState } from 'react';
+import { useRef, useMemo } from 'react';
 
 interface P5PreviewProps {
   code: string;
+  resetCounter?: number;
 }
 
-const P5Preview = ({ code }: P5PreviewProps) => {
+const P5Preview = ({ code, resetCounter = 0 }: P5PreviewProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [resetCounter, setResetCounter] = useState(0);
 
   // Create the HTML content as a data URI
   const htmlSrc = useMemo(() => {
@@ -53,10 +53,6 @@ const P5Preview = ({ code }: P5PreviewProps) => {
     return `data:text/html;charset=utf-8,${encodeURIComponent(htmlContent)}`;
   }, [code]);
 
-  const handleReset = () => {
-    setResetCounter(prev => prev + 1);
-  };
-
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <iframe 
@@ -72,27 +68,6 @@ const P5Preview = ({ code }: P5PreviewProps) => {
         }}
         sandbox="allow-scripts"
       />
-      <button
-        onClick={handleReset}
-        style={{
-          position: 'absolute',
-          top: '10px',
-          right: '10px',
-          zIndex: 10,
-          padding: '6px 12px',
-          background: '#f0f0f0',
-          border: '1px solid #ccc',
-          borderRadius: '4px',
-          cursor: 'pointer',
-          fontSize: '12px',
-          opacity: 0.8,
-          transition: 'opacity 0.2s'
-        }}
-        onMouseOver={(e) => e.currentTarget.style.opacity = '1'}
-        onMouseOut={(e) => e.currentTarget.style.opacity = '0.8'}
-      >
-        Reset Sketch
-      </button>
     </div>
   );
 };
